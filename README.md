@@ -1,3 +1,6 @@
+【注意】
+shellscript内は一部環境によって予期しない動作をする可能性があります。
+
 【準備】
 discord.pyのインストール
 Discord botを作成できている(botのTOKENを取得できる)
@@ -15,3 +18,4 @@ sudo DISCORD_TOKEN=`cat lubuntu_bot_token.auth` CHANNEL=`cat lubuntu_ssh.ch` pyt
 【参考】
 シェルスクリプトマガジン 最終回　不正アクセスを通知する
 https://shell-mag.com/rensai-shellscript1-13/
+

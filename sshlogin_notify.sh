@@ -16,6 +16,12 @@ date_time() {
 	TIME="${MONTH}月${DATE}日${HOUR}時${MINUTE}分${SECOND}秒"
 }
 
+ip2contry(){
+	COUNTRY=$(whois ${1} | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
+	if [ -z $COUNTRY ]; then
+		COUNTRY="不明"
+	fi
+}
 
 if [ -f ${LOGFILE_NAME} ]; then
 

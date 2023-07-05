@@ -16,8 +16,8 @@ date_time() {
 	TIME="${MONTH}月${DATE}日${HOUR}時${MINUTE}分${SECOND}秒"
 }
 
-ip2contry(){
-	COUNTRY=$(whois ${1} | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
+ip2country(){
+	COUNTRY=$(whois $1 | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
 	if [ -z $COUNTRY ]; then
 		COUNTRY="不明"
 	fi
@@ -32,11 +32,7 @@ if [ -f ${LOGFILE_NAME} ]; then
 	cat /tmp/tmp_login.log | while read line
 do
 	IP=$(echo $line | cut -f 11 -d " ")
-	#ip2country $IP
-	COUNTRY=$(whois ${IP} | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
-	if [ -z $COUNTRY ]; then
-		COUNTRY="不明"
-	fi
+	ip2country $IP
 	USER=$(echo $line | cut -f 9 -d " ")
 	date_time $line
 	echo "${IP}(${COUNTRY}):${USER} is accepted to login.($TIME)"
@@ -46,10 +42,7 @@ done
 	cat /tmp/tmp_nologin.log | while read line
 do
 	IP=$(echo $line | cut -f 12 -d " ")
-	COUNTRY=$(whois ${IP} | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
-	if [ -z $COUNTRY ]; then
-		COUNTRY="不明"
-	fi
+	ip2country $IP
 	USER=$(echo $line | cut -f 11 -d " ")
 	date_time $line
 	echo "${IP}($COUNTRY):denied to access as ${USER}.(${TIME})"

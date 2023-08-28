@@ -16,36 +16,27 @@ date_time() {
 	TIME="${MONTH}月${DATE}日${HOUR}時${MINUTE}分${SECOND}秒"
 }
 
-ip2country(){
-	COUNTRY=$(whois $1 | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
-	if [ -z $COUNTRY ]; then
-		COUNTRY="不明"
-	fi
-}
-
 if [ -f ${LOGFILE_NAME} ]; then
 
 	mv ${LOGFILE_NAME} /tmp/tmp_auth.log
 	service rsyslog restart
 
-	cat /tmp/tmp_auth.log | grep "Accepted" > /tmp/tmp_login.log
+	cat /tmp/tmp_auth.log | grep "sshd\[[0-9]*\]" | grep "Accepted" > /tmp/tmp_login.log
 	cat /tmp/tmp_login.log | while read line
 do
 	IP=$(echo $line | cut -f 11 -d " ")
-	ip2country $IP
 	USER=$(echo $line | cut -f 9 -d " ")
 	date_time $line
-	echo "${IP}(${COUNTRY}):${USER} is accepted to login.($TIME)"
+	echo "${IP}:allow to access as ${USER}.(${TIME})"
 done
 
-	cat /tmp/tmp_auth.log | grep "preauth" > /tmp/tmp_nologin.log
+	cat /tmp/tmp_auth.log | grep "sshd\[[0-9]*\]" | grep "preauth" > /tmp/tmp_nologin.log
 	cat /tmp/tmp_nologin.log | while read line
 do
 	IP=$(echo $line | cut -f 12 -d " ")
-	ip2country $IP
 	USER=$(echo $line | cut -f 11 -d " ")
 	date_time $line
-	echo "${IP}($COUNTRY):denied to access as ${USER}.(${TIME})"
+	echo "${IP}:denied to access as ${USER}.(${TIME})"
 done
 
 	rm /tmp/tmp_auth.log /tmp/tmp_login.log /tmp/tmp_nologin.log

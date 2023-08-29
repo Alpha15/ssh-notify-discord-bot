@@ -15,7 +15,7 @@ Discord botを動かしているLubuntu機にsshでの接続(または接続要�
 sudo systemctl restart rsyslog
 
 【起動方法】  
-sudo DISCORD_TOKEN=`cat lubuntu_bot_token.auth` CHANNEL=`cat lubuntu_ssh.ch` python3 lubuntu_bot.py
+sudo DISCORD_TOKEN=`cat lubuntu_bot_token.auth` CHANNEL=`cat lubuntu_ssh.ch` python3 main.py
 
 ファイルに格納したTOKENとチャンネルIDを環境変数に渡して起動している.
 

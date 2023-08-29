@@ -2,8 +2,6 @@ import discord
 from discord.ext import tasks
 
 import os
-from datetime import date
-import time
 import subprocess
 from subprocess import PIPE
 

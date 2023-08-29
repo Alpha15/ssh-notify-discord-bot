@@ -4,6 +4,7 @@ from discord.ext import tasks
 import os
 import subprocess
 from subprocess import PIPE
+from utils import coloredString
 
 Intents = discord.Intents.all()
 client = discord.Client(intents=Intents)
@@ -25,8 +26,9 @@ async def loop():
     if not result:
         pass
     else:
-        for split_str in result.splitlines():
-            await send_message(split_str)
+        for splStr in result.splitlines():
+            sendMessage = coloredString(splStr)
+            await send_message(sendMessage)
 
 
 async def send_message(message):

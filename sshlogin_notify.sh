@@ -28,7 +28,7 @@ if [ -f ${LOGFILE_NAME} ]; then
 		IP=$(echo $line | cut -f 11 -d " ")
 		USER=$(echo $line | cut -f 9 -d " ")
 		date_time $line
-		echo "${IP}:allow to access as ${USER}.(${TIME})"
+		echo "${IP}:allowed to access as ${USER}.(${TIME})"
 	done
 
 	# Login failed (wrong auth)

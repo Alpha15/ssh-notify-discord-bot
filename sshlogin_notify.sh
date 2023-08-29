@@ -16,38 +16,43 @@ date_time() {
 	TIME="${MONTH}月${DATE}日${HOUR}時${MINUTE}分${SECOND}秒"
 }
 
-ip2country(){
-	COUNTRY=$(whois $1 | grep "country:" | uniq | cut -f 2 -d ":" | sed 's/ //g')
-	if [ -z $COUNTRY ]; then
-		COUNTRY="不明"
-	fi
-}
-
 if [ -f ${LOGFILE_NAME} ]; then
 
 	mv ${LOGFILE_NAME} /tmp/tmp_auth.log
 	service rsyslog restart
 
-	cat /tmp/tmp_auth.log | grep "Accepted" > /tmp/tmp_login.log
+	# Login success
+	cat /tmp/tmp_auth.log | grep "sshd\[[0-9]*\]" | grep "Accepted" > /tmp/tmp_login.log
 	cat /tmp/tmp_login.log | while read line
-do
-	IP=$(echo $line | cut -f 11 -d " ")
-	ip2country $IP
-	USER=$(echo $line | cut -f 9 -d " ")
-	date_time $line
-	echo "${IP}(${COUNTRY}):${USER} is accepted to login.($TIME)"
-done
+	do
+		IP=$(echo $line | cut -f 11 -d " ")
+		USER=$(echo $line | cut -f 9 -d " ")
+		date_time $line
+		echo "${IP}:allow to access as ${USER}.(${TIME})"
+	done
 
-	cat /tmp/tmp_auth.log | grep "preauth" > /tmp/tmp_nologin.log
+	# Login failed (wrong auth)
+	cat /tmp/tmp_auth.log | grep "sshd\[[0-9]*\]" | grep "preauth" > /tmp/tmp_nologin.log
 	cat /tmp/tmp_nologin.log | while read line
-do
-	IP=$(echo $line | cut -f 12 -d " ")
-	ip2country $IP
-	USER=$(echo $line | cut -f 11 -d " ")
-	date_time $line
-	echo "${IP}($COUNTRY):denied to access as ${USER}.(${TIME})"
-done
+	do
+		IP=$(echo $line | cut -f 12 -d " ")
+		USER=$(echo $line | cut -f 11 -d " ")
+		date_time $line
+		echo "${IP}:denied to access as ${USER}.(${TIME})"
+	done
 
-	rm /tmp/tmp_auth.log /tmp/tmp_login.log /tmp/tmp_nologin.log
+	# Login failed (wrong protocol)
+	cat /tmp/tmp_auth.log | grep "sshd\[[0-9]*\]" | grep "Did not receive identification string" > /tmp/tmp_noidentification.log
+	cat /tmp/tmp_noidentification.log | while read line
+	do
+		IP=$(echo $line | cut -f 12 -d " ")
+		date_time $line
+		echo "Did not receive identification string from ${IP}.(${TIME})"
+	done
+
+	rm /tmp/tmp_auth.log
+	rm /tmp/tmp_login.log
+	rm /tmp/tmp_nologin.log
+	rm /tmp/tmp_noidentification.log
 
 fi

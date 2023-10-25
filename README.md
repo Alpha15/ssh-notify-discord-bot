@@ -14,6 +14,7 @@ Discord botを動かしているLubuntu機にsshでの接続(または接続要�
   
 ## 想定される出力ログ  
 > MONTH DD HH:mm:ss SERVER_NAME sshd[XXXX]: Accepted publickey for USER_NAME from XXX.XXX.XXX.XXX port XXXX ssh2: KEY HOGEHOGE  
+
 必要に応じてテンプレートを変更してください.  
 
 ログを書き込んでいるデーモンをリスタートさせる.  

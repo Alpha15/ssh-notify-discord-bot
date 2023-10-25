@@ -1,6 +1,3 @@
-【注意】  
-**shellscriptは一部環境によって予期しない動作をする可能性があります**
-
 # 【概要】  
 Discord botを動かしているUbuntu機にsshでの接続(または接続要求)があった時に,接続元IPとuser名,日時をdiscordの任意のチャンネルにて通知してくれる.
 なお,sshは公開鍵のみの認証を想定している.
@@ -21,10 +18,15 @@ Discord botを動かしているUbuntu機にsshでの接続(または接続要�
 `sudo systemctl restart rsyslog`
 
 # 【起動方法】  
-sudo DISCORD_TOKEN=\`cat token.auth\` CHANNEL=\`cat channel_id.ch\` python3 main.py
+sudo DISCORD_TOKEN=`cat token.auth\` CHANNEL=\`cat channel_id.ch\` python3 main.py  
+ファイルに格納したTOKENとチャンネルIDを環境変数に渡して起動している.  
 
-ファイルに格納したTOKENとチャンネルIDを環境変数に渡して起動している.
+## 【コマンド】  
+`!who`コマンドによりログイン中のユーザ一覧を取得できます.  
 
+# 【免責事項】  
+Ubuntu環境を想定しています。  
+全ての環境での動作は保証されません。  
 
 # 【参考】  
  - シェルスクリプトマガジン 最終回　不正アクセスを通知する  

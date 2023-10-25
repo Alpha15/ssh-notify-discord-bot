@@ -3,8 +3,9 @@ from discord.ext import tasks
 
 import os
 import subprocess
-from subprocess import PIPE
 from utils import coloredString
+from utils import commandWho
+from utils import commandCheckAuth
 
 Intents = discord.Intents.all()
 client = discord.Client(intents=Intents)
@@ -19,17 +20,24 @@ async def on_ready():
     print("----------")
     loop.start()
 
+
+@client.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    if message.content == "!who":
+        await message.reply(commandWho())
+
+
 @tasks.loop(seconds=3.0)
 async def loop():
-    proc = subprocess.run("sh sshlogin_notify.sh", shell=True, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-    result = proc.stdout
+    result = commandCheckAuth()
     if not result:
         pass
     else:
-        for splStr in result.splitlines():
-            sendMessage = coloredString(splStr)
+        for preMsg in result.splitlines():
+            sendMessage = coloredString(preMsg)
             await send_message(sendMessage)
-
 
 async def send_message(message):
     await client.get_channel(CHANNEL).send('{}'.format(message))

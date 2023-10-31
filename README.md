@@ -3,7 +3,8 @@ Discord botを動かしているUbuntu機にsshでの接続(または接続要�
 なお,sshは公開鍵のみの認証を想定している.
 
 # 【準備】
- - discord.pyのインストール  
+ - python(ver: 3.8以降)のインストール
+ - discord.py(ver: 2.x.x)のインストール  
  - Discord botを作成できている(botのTOKENを取得できる)  
  - 通知を送信したいチャンネルのIDがわかっている  
 

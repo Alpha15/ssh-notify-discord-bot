@@ -25,7 +25,7 @@ async def on_ready():
 
 @tree.command(name="who", description="you will know who logged in")
 async def _who_command(ctx:discord.Interaction):
-    await ctx.response.send_message(commandWho())
+    await ctx.response.send_message(commandWho(),ephemeral=True)
 
 @tasks.loop(seconds=3.0)
 async def loop():
